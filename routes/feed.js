@@ -7,7 +7,7 @@ const router = express.Router();
 
 // GET /feed/posts
 router.get('/posts', feedController.getPosts);
-router.get('/posts/:postId', feedController.getPost)
+router.get('/post/:postId', feedController.getPost)
 // POST /feed/post
 router.post(
   '/post',
@@ -21,5 +21,14 @@ router.post(
   ],
   feedController.createPost
 );
+
+router.put('/post/:postId', [
+  body('title')
+      .trim()
+      .isLength({ min: 7 }),
+    body('content')
+      .trim()
+      .isLength({ min: 5 })
+], feedController.updatePost)
 
 module.exports = router;
