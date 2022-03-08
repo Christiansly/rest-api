@@ -52,6 +52,20 @@ app.use((req, res, next) => {
   next();
 });
 app.use(auth)
+app.put('/post-image', (req, res, next) => {
+  if(!req.isAuth) {
+    throw new Error('Not authenticated')
+  }
+  if(!req.file) {
+    return res.status(200).json({message: "No file provided!"})
+  }
+  if(req.body.oldPath) {
+    clearImage(req.body.oldPath)
+  }
+  console.log("file path",req.file.path)
+  return res.status(200).json({message: "File Stored successfully", filePath: req.file.path})
+})
+
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema,
   rootValue: graphqlResolver,
